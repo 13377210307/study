@@ -1,4 +1,4 @@
-package com.design.responseLink.example;
+package com.design.responseLink.example1;
 
 import lombok.Data;
 
