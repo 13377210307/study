@@ -1,7 +1,9 @@
 package com.jdk8.practice.stream.operate;
 
 import com.jdk8.practice.stream.entity.Employee;
+import com.jdk8.practice.stream.entity.Student;
 import com.jdk8.practice.stream.utils.InitEmployeesUtil;
+import com.jdk8.practice.stream.utils.InitStudentUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,8 @@ import java.util.stream.Collectors;
 public class GroupByPractice {
 
     public static void main(String[] args) {
-        employeeGroupByRoleAndAge();
+        //employeeGroupByRoleAndAge();
+        classGroupByClassName();
     }
 
     /**
@@ -33,5 +36,14 @@ public class GroupByPractice {
         List<Employee> employees = InitEmployeesUtil.initEmployees();
         Map<String, Map<Integer, List<Employee>>> collect = employees.stream().collect(Collectors.groupingBy(Employee::getRole, Collectors.groupingBy(Employee::getAge)));
         System.out.println(collect);
+    }
+
+    /**
+     * 根据班级进行分组
+     */
+    private static void classGroupByClassName() {
+        List<Student> students = InitStudentUtil.initStudents();
+        Map<String, List<Student>> classes = students.stream().collect(Collectors.groupingBy(Student::getClassName));
+        System.out.println(classes);
     }
 }

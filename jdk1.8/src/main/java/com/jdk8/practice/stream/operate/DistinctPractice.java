@@ -32,7 +32,6 @@ public class DistinctPractice {
 
         System.out.println("去重之后============");
         employees.stream().distinct().map(Employee::getName).forEach(System.out::println);
-
-
+        
     }
 }
