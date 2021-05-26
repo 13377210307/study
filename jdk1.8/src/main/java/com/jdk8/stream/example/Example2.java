@@ -4,10 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.jdk8.stream.entity.Dish;
 import com.jdk8.stream.entity.Type;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +31,7 @@ public class Example2 {
             }
         }*/
 
-        Map<Type, List<Dish>> typeListMap = newMethod(dishes);
+        /*Map<Type, List<Dish>> typeListMap = newMethod(dishes);
         if (CollectionUtil.isNotEmpty(typeListMap)) {
             for (Type key : typeListMap.keySet()) {
                 if (CollectionUtil.isNotEmpty(typeListMap.get(key))) {
@@ -43,7 +40,7 @@ public class Example2 {
                     }
                 }
             }
-        }
+        }*/
     }
 
     // 旧方法
@@ -94,3 +91,4 @@ public class Example2 {
 
 
 }
+
