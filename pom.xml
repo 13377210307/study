@@ -12,6 +12,7 @@
         <module>jdk1.8</module>
         <module>basic</module>
         <module>design-model</module>
+        <module>middleWare</module>
     </modules>
 
     <build>

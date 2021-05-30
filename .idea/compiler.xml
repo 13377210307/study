@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="design-model" />
         <module name="basic" />
+        <module name="middleWare" />
         <module name="jdk1.8" />
       </profile>
     </annotationProcessing>
