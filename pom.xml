@@ -13,6 +13,7 @@
         <module>basic</module>
         <module>design-model</module>
         <module>middleWare</module>
+        <module>new-design-model</module>
     </modules>
 
     <build>
