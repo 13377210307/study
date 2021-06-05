@@ -1,4 +1,4 @@
-package com.middleWare.rabbitMq.service;
+package com.middleWare.rabbitMq.deadLetter.service;
 
 /**
  * @Author: w

@@ -1,4 +1,4 @@
-package com.middleWare.rabbitMq.listener;
+package com.middleWare.rabbitMq.deadLetter.listener;
 
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;

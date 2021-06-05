@@ -1,7 +1,7 @@
-package com.middleWare.rabbitMq.service.impl;
+package com.middleWare.rabbitMq.deadLetter.service.impl;
 
-import com.middleWare.rabbitMq.enums.MqEnum;
-import com.middleWare.rabbitMq.service.DeadLetterService;
+import com.middleWare.rabbitMq.deadLetter.enums.MqEnum;
+import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.middleWare.rabbitMq.enums;
+package com.middleWare.rabbitMq.deadLetter.enums;
 
 /**
  * @Author: w

@@ -1,6 +1,6 @@
-package com.middleWare.rabbitMq.controller;
+package com.middleWare.rabbitMq.deadLetter.controller;
 
-import com.middleWare.rabbitMq.service.DeadLetterService;
+import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

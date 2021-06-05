@@ -1,6 +1,6 @@
-package com.middleWare.rabbitMq.config;
+package com.middleWare.rabbitMq.deadLetter.config;
 
-import com.middleWare.rabbitMq.enums.MqEnum;
+import com.middleWare.rabbitMq.deadLetter.enums.MqEnum;
 import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class DeadLetterQueueConfig {
      */
     @Bean
     public Queue businessQueue() {
-        Map<String, Object> args = new HashMap<>(2);
+        Map<String, Object> args = new HashMap<>();
         args.put("x-dead-letter-exchange",MqEnum.DEAD_LETTER_EXCHANGE.name);
         args.put("x-dead-letter-routing-key",MqEnum.DEAD_LETTER_ROUTING_KEY.name);
         return QueueBuilder.durable(MqEnum.BUSINESS_QUEUE.name).withArguments(args).build();
