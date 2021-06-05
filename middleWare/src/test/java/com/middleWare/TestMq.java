@@ -1,7 +1,8 @@
 package com.middleWare;
 
 import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
-import com.middleWare.rabbitMq.delayQueue.service.SendMsgService;
+import com.middleWare.rabbitMq.delayQueue.service.DelayOrderService;
+import com.middleWare.rabbitMq.delayQueue.service.DelayService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ public class TestMq {
     private DeadLetterService deadLetterService;
 
     @Autowired
-    private SendMsgService sendMsgService;
+    private DelayService delayService;
+
+    @Autowired
+    private DelayOrderService delayOrderService;
 
     @Test
     public void testSendMsgToDeadLetter() {
@@ -32,6 +36,11 @@ public class TestMq {
     @Test
     public void testSendMsgToDelayQueue() {
         System.out.println("=====================" + new Date());
-        this.sendMsgService.sendMsg();
+        this.delayService.sendMsg();
+    }
+
+    @Test
+    public void testSendMsgToDelayOrderQueue() {
+        this.delayOrderService.sendMsg();
     }
 }

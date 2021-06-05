@@ -1,19 +1,17 @@
 package com.middleWare.rabbitMq.delayQueue.service.impl;
 
 import com.middleWare.rabbitMq.delayQueue.enums.MqEnum;
-import com.middleWare.rabbitMq.delayQueue.service.SendMsgService;
+import com.middleWare.rabbitMq.delayQueue.service.DelayOrderService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 /**
  * @Author: w
- * @Date: 2021/6/5 11:40
+ * @Date: 2021/6/5 18:29
  */
 @Service
-public class SendMsgServiceImpl implements SendMsgService {
+public class DelayOrderServiceImpl implements DelayOrderService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -21,7 +19,6 @@ public class SendMsgServiceImpl implements SendMsgService {
 
     @Override
     public void sendMsg() {
-        System.out.println("发送消息...." + new Date());
-        this.rabbitTemplate.convertAndSend(MqEnum.DELAY_EXCHANGE.name,MqEnum.DELAY_ROUTING_KEY.name,"测试延时队列");
+        this.rabbitTemplate.convertAndSend(MqEnum.DELAY_ORDER_EXCHANGE.name,MqEnum.DELAY_ORDER_ROUTING_KEY.name,"订单支付超时信息");
     }
 }
