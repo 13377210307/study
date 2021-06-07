@@ -3,6 +3,7 @@ package com.middleWare;
 import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayOrderService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayService;
+import com.middleWare.rabbitMq.ttlMessage.service.TtlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class TestMq {
     @Autowired
     private DelayOrderService delayOrderService;
 
+    @Autowired
+    private TtlService ttlService;
+
     @Test
     public void testSendMsgToDeadLetter() {
         this.deadLetterService.sendMsgToDeadLetter("测试死信队列");
@@ -42,5 +46,15 @@ public class TestMq {
     @Test
     public void testSendMsgToDelayOrderQueue() {
         this.delayOrderService.sendMsg();
+    }
+
+    @Test
+    public void testSendMsgTTl() {
+        this.ttlService.sendMessageTTl();
+    }
+
+    @Test
+    public void testSendMsgQueueTTl() {
+        this.ttlService.sendQueueTTl();
     }
 }

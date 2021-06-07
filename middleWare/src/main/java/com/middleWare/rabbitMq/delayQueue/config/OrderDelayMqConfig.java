@@ -34,7 +34,7 @@ public class OrderDelayMqConfig {
         args.put("x-dead-letter-exchange",MqEnum.DELAY_ORDER_DEAD_LETTER_EXCHANGE.name);
         // 绑定死信路由
         args.put("x-dead-letter-routing-key",MqEnum.DELAY_ORDER_DEAD_LETTER_ROUTING_KEY.name);
-        // 设置延时时间
+        // 设置延时时间，这里可以去读取数据库保存得延时时间
         args.put("x-message-ttl",6000);
         return QueueBuilder.durable(MqEnum.DELAY_ORDER_QUEUE.name).withArguments(args).build();
     }

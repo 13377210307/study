@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="jdk1.8" />
-        <module name="design-model" />
-        <module name="middleWare" />
-        <module name="basic" />
         <module name="new-design-model" />
+        <module name="design-model" />
+        <module name="basic" />
+        <module name="middleWare" />
+        <module name="jdk1.8" />
       </profile>
     </annotationProcessing>
   </component>
