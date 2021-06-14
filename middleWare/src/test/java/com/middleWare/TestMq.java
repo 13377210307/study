@@ -2,6 +2,7 @@ package com.middleWare;
 
 import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayOrderService;
+import com.middleWare.rabbitMq.delayQueue.service.DelayRefundService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayService;
 import com.middleWare.rabbitMq.ttlMessage.service.TtlService;
 import org.junit.Test;
@@ -32,29 +33,43 @@ public class TestMq {
     @Autowired
     private TtlService ttlService;
 
+    @Autowired
+    private DelayRefundService delayRefundService;
+
+    // 测试死信队列
     @Test
     public void testSendMsgToDeadLetter() {
         this.deadLetterService.sendMsgToDeadLetter("测试死信队列");
     }
 
+    // 测试延时队列
     @Test
     public void testSendMsgToDelayQueue() {
         System.out.println("=====================" + new Date());
         this.delayService.sendMsg();
     }
 
+    // 订单延时
     @Test
     public void testSendMsgToDelayOrderQueue() {
         this.delayOrderService.sendMsg();
     }
 
+    // 单条消息ttl
     @Test
     public void testSendMsgTTl() {
         this.ttlService.sendMessageTTl();
     }
 
+    // 队列消息ttl
     @Test
     public void testSendMsgQueueTTl() {
         this.ttlService.sendQueueTTl();
+    }
+
+    // 退款延时
+    @Test
+    public void testSendRefundMsg() {
+        this.delayRefundService.sendMsg("张三");
     }
 }

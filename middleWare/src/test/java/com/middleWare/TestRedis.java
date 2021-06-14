@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class TestArticleReadCount {
+public class TestRedis {
 
     @Autowired
     private ArticleReadCount articleReadCount;

@@ -17,7 +17,13 @@ public enum MqEnum {
     DELAY_ORDER_ROUTING_KEY("延时订单路由键","delayOrderRoutingKey"),
     DELAY_ORDER_DEAD_LETTER_QUEUE("延时订单死信队列","delayOrderDeadLetterQueue"),
     DELAY_ORDER_DEAD_LETTER_EXCHANGE("延时订单死信交换机","delayOrderDeadLetterExchange"),
-    DELAY_ORDER_DEAD_LETTER_ROUTING_KEY("延时订单死信路由","delayOrderDeadLetterRoutingKey");
+    DELAY_ORDER_DEAD_LETTER_ROUTING_KEY("延时订单死信路由","delayOrderDeadLetterRoutingKey"),
+    DELAY_REFUND_ORDER_QUEUE("延时退款队列","delayRefundOrderQueue"),
+    DELAY_REFUND_ORDER_EXCHANGE("延时退款交换机","delayRefundOrderExchange"),
+    DELAY_REFUND_ORDER_ROUTING_KEY("延时退款路由键","delayRefundOrderRoutingKey"),
+    DELAY_REFUND_ORDER_DEAD_LETTER_QUEUE("延时退款死信队列","delayRefundOrderDeadLetterQueue"),
+    DELAY_REFUND_ORDER_DEAD_LETTER_EXCHANGE("延时退款死信交换机","delayRefundOrderDeadLetterExchange"),
+    DELAY_REFUND_ORDER_DEAD_LETTER_ROUTING_KEY("延时退款死信路由","delayRefundOrderDeadLetterRoutingKey");
 
     public String description;
 

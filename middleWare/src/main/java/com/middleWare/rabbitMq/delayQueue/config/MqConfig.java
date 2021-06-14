@@ -27,6 +27,18 @@ public class MqConfig {
         return new DirectExchange(MqEnum.DELAY_DEAD_LETTER_EXCHANGE.name);
     }
 
+    // 退款交换机
+    @Bean
+    public DirectExchange delayRefundOrderExchange() {
+        return new DirectExchange(MqEnum.DELAY_REFUND_ORDER_EXCHANGE.name);
+    }
+
+    //退款死信交换机
+    @Bean
+    public DirectExchange delayRefundOrderDeadLetterExchange() {
+        return new DirectExchange(MqEnum.DELAY_REFUND_ORDER_DEAD_LETTER_EXCHANGE.name);
+    }
+
     // 声明队列：给延时队列设置延时时间，到了指定时间投递到死信队列
     @Bean
     public Queue delayQueue() {
@@ -45,6 +57,25 @@ public class MqConfig {
         return new Queue(MqEnum.DELAY_DEAD_LETTER_QUEUE.name);
     }
 
+    // 退款队列
+    @Bean
+    public Queue delayRefundOrderQueue() {
+        Map<String,Object> args = new HashMap<>();
+        // 绑定死信交换机
+        args.put("x-dead-letter-exchange",MqEnum.DELAY_REFUND_ORDER_DEAD_LETTER_EXCHANGE.name);
+        // 绑定死信路由
+        args.put("x-dead-letter-routing-key",MqEnum.DELAY_REFUND_ORDER_DEAD_LETTER_ROUTING_KEY.name);
+        // 设置延时时间
+        args.put("x-message-ttl",3000);
+        return QueueBuilder.durable(MqEnum.DELAY_REFUND_ORDER_QUEUE.name).build();
+    }
+
+    // 退款死信队列
+    @Bean
+    public Queue delayRefundOrderDeadLetterQueue() {
+        return new Queue(MqEnum.DELAY_REFUND_ORDER_DEAD_LETTER_QUEUE.name);
+    }
+
     // 绑定
     @Bean
     public Binding delayBinding() {
@@ -54,6 +85,18 @@ public class MqConfig {
     @Bean
     public Binding delayDeadLetterBinding() {
         return BindingBuilder.bind(delayDeadLetterQueue()).to(delayDeadLetterExchange()).with(MqEnum.DELAY_DEAD_LETTER_ROUTING_KEY.name);
+    }
+
+    // 绑定退款队列
+    @Bean
+    public Binding refundBinding() {
+        return BindingBuilder.bind(delayRefundOrderQueue()).to(delayRefundOrderExchange()).with(MqEnum.DELAY_REFUND_ORDER_ROUTING_KEY.name);
+    }
+
+    // 绑定退款死信队列
+    @Bean
+    public Binding refundDeadLetterBinding() {
+        return BindingBuilder.bind(delayRefundOrderDeadLetterQueue()).to(delayRefundOrderDeadLetterExchange()).with(MqEnum.DELAY_REFUND_ORDER_DEAD_LETTER_ROUTING_KEY.name);
     }
 
 

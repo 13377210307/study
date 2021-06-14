@@ -20,4 +20,11 @@ public class DelayOrderDeadLetterConsumer {
         System.out.println("抱歉，您的订单" + message +"在十分钟内未进行支付，已取消");
         channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
+
+    @RabbitListener(queues = "delayRefundOrderQueue")
+    public void receiveRefund(Message message, Channel channel) throws IOException {
+        // 根据订单号查询是否支付
+        System.out.println("亲：您有一天新信息：" + message);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+    }
 }
