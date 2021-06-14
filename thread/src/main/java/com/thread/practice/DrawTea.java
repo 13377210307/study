@@ -41,6 +41,7 @@ public class DrawTea {
                 // 烧水
                 System.out.println("正在烧水...");
                 TimeUnit.SECONDS.sleep(5);
+                System.out.println("烧水完毕");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
