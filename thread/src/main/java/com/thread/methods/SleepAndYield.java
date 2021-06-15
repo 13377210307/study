@@ -1,6 +1,7 @@
 package com.thread.methods;
 
-import org.apache.tomcat.jni.Time;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  * 线程优先级
  * 如果cpu比较忙，那么高优先级的线程会获得更多的时间片，但cpu闲时，优先级几乎没用
  */
+@Slf4j
 public class SleepAndYield {
 
     public static void main(String[] args) {
@@ -32,16 +34,16 @@ public class SleepAndYield {
      * 新线程休眠2秒；主线程休眠1秒后获取新线程状态
      */
     private static void threadSleep() {
-        System.out.println(new Date() + "  开始休眠...");
+        log.debug("开始休眠...");
         Thread thread = new Thread(() -> {
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(new Date() + "  休眠完毕...");
+            log.debug("休眠完毕...");
         });
-        System.out.println("线程状态" + thread.getState());
+        log.debug("线程状态：{}",thread.getState());
         thread.start();
         // 主线程休眠
         try {
@@ -49,17 +51,17 @@ public class SleepAndYield {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("线程状态" + thread.getState());
+        log.debug("线程状态：{}",thread.getState());
     }
 
     // 新线程休眠2秒；主线程休眠1秒后打断休眠的新线程
     private static void interruptSleep() {
         Thread thread = new Thread(() -> {
             try {
-                System.out.println(new Date() + " sleep...");
+                log.debug("sleep...");
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
-                System.out.println(new Date() + " wake up...");
+                log.debug("wake up...");
                 e.printStackTrace();
             }
         });
@@ -71,7 +73,7 @@ public class SleepAndYield {
             e.printStackTrace();
         }
         // 打断休眠
-        System.out.println(new Date() + " interrupt...");
+        log.debug("interrupt...");
         thread.interrupt();
     }
 

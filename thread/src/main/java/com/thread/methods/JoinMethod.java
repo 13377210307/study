@@ -1,5 +1,7 @@
 package com.thread.methods;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/6/13 22:15
  *
  */
+@Slf4j
 public class JoinMethod {
 
     private static int r = 0;
@@ -37,7 +40,7 @@ public class JoinMethod {
                 e.printStackTrace();
             }
         }).start();
-        System.out.println(r);
+        log.debug("结果为：{}",r);
     }
 
     /**
@@ -58,7 +61,7 @@ public class JoinMethod {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(r);
+        log.debug("结果为：{}",r);
     }
 
     /**
@@ -94,7 +97,7 @@ public class JoinMethod {
             e.printStackTrace();
         }
         Long end = System.currentTimeMillis();
-        System.out.println(end - start);
+        log.debug("耗费时间为：{}",end - start);
     }
 
     /**
@@ -130,7 +133,7 @@ public class JoinMethod {
             e.printStackTrace();
         }
         Long end = System.currentTimeMillis();
-        System.out.println(end - start);
+        log.debug("耗费时间为：{}",end - start);
     }
 
     /**
@@ -154,7 +157,8 @@ public class JoinMethod {
             e.printStackTrace();
         }
         Long end = System.currentTimeMillis();
-        System.out.println(r1);
-        System.out.println(end - start);
+
+        log.debug("结果为：{}",r1);
+        log.debug("耗费时间为：{}",end - start);
     }
 }

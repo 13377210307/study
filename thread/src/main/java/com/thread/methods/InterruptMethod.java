@@ -1,5 +1,7 @@
 package com.thread.methods;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -7,6 +9,7 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2021/6/13 22:47
  * 打断线程运行状态
  */
+@Slf4j
 public class InterruptMethod {
 
     // 监控器
@@ -36,7 +39,7 @@ public class InterruptMethod {
             e.printStackTrace();
         }
         thread.interrupt();
-        System.out.println("打断状态："+ thread.isInterrupted());
+        log.debug("打断状态：{}",thread.isInterrupted());
     }
 
     /**
@@ -50,7 +53,7 @@ public class InterruptMethod {
                 Thread current = Thread.currentThread();
                 boolean interrupted = current.isInterrupted();
                 if(interrupted) {
-                    System.out.println("打断状态："+ interrupted);
+                    log.debug("打断状态：{}",interrupted);
                     break;
                 }
             }
@@ -105,7 +108,7 @@ public class InterruptMethod {
                 boolean interrupted = thread.isInterrupted();
                 if (interrupted) {
                     // 被打断了，料理后事
-                    System.out.println("料理后事");
+                    log.debug("料理后事");
                     // 退出循环
                     break;
                 }
@@ -113,7 +116,7 @@ public class InterruptMethod {
                 try {
                     // 若sleep的时候被打断，会进入异常且打断标记为false，所以需要重新设置打断标记
                     TimeUnit.SECONDS.sleep(1);
-                    System.out.println("执行监控记录");
+                    log.debug("执行监控记录");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     // 设置打断标记
