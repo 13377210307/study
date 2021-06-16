@@ -10,9 +10,9 @@
         <module name="netty" />
         <module name="new-design-model" />
         <module name="middleWare" />
-        <module name="basic" />
-        <module name="design-model" />
         <module name="thread" />
+        <module name="design-model" />
+        <module name="basic" />
       </profile>
     </annotationProcessing>
   </component>

@@ -29,7 +29,7 @@ public class SaleTickets {
         List<Integer> saleTickets = new Vector<>();
         // 线程集合
         List<Thread> threads = new ArrayList<>();
-        // 模拟200个人卖票
+        // 模拟1000个人卖票
         for (int i = 0; i < 1000; i++) {
             Thread thread = new Thread(() -> {
                 int ticket = ticketWindow.sellUnSafe(randomAmount());

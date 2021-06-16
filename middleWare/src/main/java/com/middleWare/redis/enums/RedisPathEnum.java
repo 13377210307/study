@@ -6,7 +6,8 @@ package com.middleWare.redis.enums;
  */
 public enum RedisPathEnum {
 
-    ARTICLE("文章阅读量","study:str:article:");
+    ARTICLE("文章阅读量","study:str:article:"),
+    BLACK_LIST("黑名单","study:set:blackList");
 
     public String description;
 
