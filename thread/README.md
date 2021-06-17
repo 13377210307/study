@@ -101,7 +101,31 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
             }
         }
     }
-    
+  
+  
+ 六：线程通讯（wait...notify）
+ 
+ 1：wait与sleep的区别
+ wait会释放锁，但sleep不会释放锁
+ 
+ 2：notify
+ notify会随机唤醒一个等待的线程；哪个锁对象调用的notify就会随机唤醒持有该锁对象的线程
+ 使用notify的时候需要加synchronized
+ 
+ 2：wait...notify的使用
+ synchronized(LOCK) {
+   while(条件不成立) {
+      LOCK.wait();
+   }
+   // 干活
+ }
+ 
+ // 另一个线程
+  synchronized(LOCK) {
+     LOCK.notifyAll();
+  }
+ 
+ 
 
 
 

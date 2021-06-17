@@ -23,6 +23,16 @@ public class BlackList {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    // 添加黑名单
+    public void addBlackList(Long userId) {
+        this.redisTemplate.opsForSet().add(RedisPathEnum.BLACK_LIST.path,userId);
+    }
+
+    // 移除黑名单
+    public void removeBlackList(Long userId) {
+        this.redisTemplate.opsForSet().remove(RedisPathEnum.BLACK_LIST.path,userId);
+    }
+
     // 初始化黑名单列表
     public void initBlackListData() {
         // 获取黑名单列表

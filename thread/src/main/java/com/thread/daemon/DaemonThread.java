@@ -1,6 +1,8 @@
 package com.thread.daemon;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -9,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  * 守护线程
  *
  */
+@Slf4j
 public class DaemonThread {
 
     public static void main(String[] args) {
@@ -25,9 +28,9 @@ public class DaemonThread {
                 if(Thread.currentThread().isInterrupted()) {
                     break;
                 }
-                System.out.println("运行中....");
+                log.debug("运行中....");
             }
-            System.out.println("运行结束...");
+            log.debug("运行结束...");
         },"daemon");
         daemon.start();
         try {
@@ -35,7 +38,7 @@ public class DaemonThread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("运行结束...");
+        log.debug("运行结束...");
     }
 
     /**
@@ -47,9 +50,9 @@ public class DaemonThread {
                 if(Thread.currentThread().isInterrupted()) {
                     break;
                 }
-                System.out.println("运行中....");
+                log.debug("运行中....");
             }
-            System.out.println("运行结束...");
+            log.debug("运行结束...");
         },"daemon");
         // 设置该线程为守护线程
         daemon.setDaemon(true);
@@ -59,6 +62,6 @@ public class DaemonThread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("运行结束...");
+        log.debug("运行结束...");
     }
 }

@@ -1,4 +1,4 @@
-package com.thread.practice;
+package com.thread.practice.threadSafe;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

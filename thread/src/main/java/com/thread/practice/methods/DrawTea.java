@@ -1,4 +1,4 @@
-package com.thread.practice;
+package com.thread.practice.methods;
 
 import java.util.concurrent.TimeUnit;
 
