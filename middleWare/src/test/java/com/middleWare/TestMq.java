@@ -4,6 +4,9 @@ import com.middleWare.rabbitMq.deadLetter.service.DeadLetterService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayOrderService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayRefundService;
 import com.middleWare.rabbitMq.delayQueue.service.DelayService;
+import com.middleWare.rabbitMq.peakClipping.service.PeakClippingService;
+import com.middleWare.rabbitMq.reliable.entity.ConfirmOrder;
+import com.middleWare.rabbitMq.reliable.service.OrderService;
 import com.middleWare.rabbitMq.ttlMessage.service.TtlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +38,12 @@ public class TestMq {
 
     @Autowired
     private DelayRefundService delayRefundService;
+
+    @Autowired
+    private PeakClippingService peakClippingService;
+
+    @Autowired
+    private OrderService orderService;
 
     // 测试死信队列
     @Test
@@ -71,5 +80,25 @@ public class TestMq {
     @Test
     public void testSendRefundMsg() {
         this.delayRefundService.sendMsg("张三");
+    }
+
+    // 削峰
+    @Test
+    public void testPeakClipping() {
+        for (int i = 0; i < 1000; i++) {
+            Integer count = i;
+            new Thread(() -> {
+                this.peakClippingService.send(count);
+            }).start();
+        }
+        //this.peakClippingService.send();
+    }
+
+    // 消息确认
+    @Test
+    public void testConfirmOrder() {
+        ConfirmOrder order = new ConfirmOrder();
+        order.setName("订单一号");
+        this.orderService.saveOrder(order);
     }
 }

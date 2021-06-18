@@ -4,13 +4,23 @@ spring:
   redis:
     host: 127.0.0.1
     database: 2
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
   rabbitmq:
     host: 39.105.59.91
     port: 5672
     username: guest
     password: guest
+    template:
+      mandatory: true
     listener:
       type: simple
       simple:
         default-requeue-rejected: false
         acknowledge-mode: manual
+    publisher-confirms: true  #开启消息确认机制
+    publisher-returns: true #支持消息发送失败返回队列
+

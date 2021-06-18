@@ -80,6 +80,10 @@ channel.queueDeclare(queueName, durable, exclusive, autoDelete, args);
 如果当前队列有严重的消息积压情况，则已过期的消息也许还能存活较长时间。
 
 ####3：mq实现削峰
+定义队列长度，超过队列长度进行丢弃
+
+####4：mq实现消息可靠性
+1：消息丢失：指定一个不存在的交换机，这样会触发消息丢失
 
 
 

@@ -1,7 +1,6 @@
 package com.middleWare.redis.set;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.middleWare.redis.entity.User;
 import com.middleWare.redis.enums.RedisPathEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
