@@ -112,7 +112,7 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
  notify会随机唤醒一个等待的线程；哪个锁对象调用的notify就会随机唤醒持有该锁对象的线程
  使用notify的时候需要加synchronized
  
- 2：wait...notify的使用
+ 3：wait...notify的使用
  synchronized(LOCK) {
    while(条件不成立) {
       LOCK.wait();
@@ -124,6 +124,68 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
   synchronized(LOCK) {
      LOCK.notifyAll();
   }
+  
+ 4：异步模式之生产者/消费者
+ 要点
+ （1）与前面的保护性暂停中的GuardObject不同，不需要产生结果和消费结果的线程一一对应
+ （2）消费队列可以用来平衡生产和消费的线程资源
+ （3）生产者仅负责生产结果数据，不关心数据如何处理，而消费者专心处理结果数据
+ （4）消息队列是有容量限制的，满时不会再加入数据，空时不会再消耗数据
+ （5）jdk中各种阻塞队列，采用的就是这种模式
+ 
+ 5：park与unPark
+ (1) 与Object的wait和notify相比
+   （1）wait，notify和notifyAll必须配合Object Monitor一起使用，而park和unPark不必
+   （2）park和unPark是以线程为单位来阻塞和唤醒线程，而notify只能随机唤醒一个等待线程；对于notifyAll是唤醒所有等待线程
+   （3）park和unPark可以先unPark，而wait和notify不能先notify
+ (2) park unpark 原理
+     每个线程都有自己的一个 Parker 对象，由三部分组成 _counter， _cond和 _mutex
+     （1）打个比喻线程就像一个旅人，Parker 就像他随身携带的背包，条件变量 _ cond就好比背包中的帐篷。_counter 就好比背包中的备用干粮（0 为耗尽，1 为充足）
+     （2）调用 park 就是要看需不需要停下来歇息
+           如果备用干粮耗尽，那么钻进帐篷歇息
+           如果备用干粮充足，那么不需停留，继续前进
+     （3）调用 unpark，就好比令干粮充足
+           如果这时线程还在帐篷，就唤醒让他继续前进
+           如果这时线程还在运行，那么下次他调用 park 时，仅是消耗掉备用干粮，不需停留继续前进
+             因为背包空间有限，多次调用 unpark 仅会补充一份备用干粮
+ 
+ 
+ 
+ 线程池
+ 1：线程池状态：ThreadPoolExecutor使用int的高3位来表示线程池状态，低29位表示线程数量
+ 
+ 状态名                 高3位                接收新任务           处理阻塞队列任务             说明
+ RUNNING               111                  是                   是               
+ SHUTDOWN              000                  否                   是           不会接收新任务，但会处理阻塞队列剩余任务
+ STOP                  001                  否                   否           会中断正在执行的任务，并抛弃阻塞队列任务
+ TIDYING               010                                                   任务全部执行完毕，活动线程为0即将进入终结
+ TERMINATED            011                                                   终结状态
+ 
+ 2：构造方法
+ （1）corePoolSize：核心线程数（最多保留的线程数）
+ （2）maximumPoolSize：最大线程数目
+ （3）keepAliveTime：生存时间-针对救急线程
+ （4）unit：时间单位-针对救急线程
+ （5）workQueue：阻塞队列
+ （6）threadFactory：线程工厂-可以为线程创建时起个名字
+ （7）handler：拒绝策略
+ 
+ 3：工作方式：
+ 救急线程与核心线程的最大区别就是救急线程有存活时间：最大线程数 = 核心线程 + 救急线程；救急线程执行完任务之后会销毁，而核心线程会保留在线程池中
+ （1）线程池刚开始没有线程，当一个任务提交给线程池后，线程池会创建一个新线程来执行任务
+ （2）当线程数达到corePoolSize并没有线程空闲的时候，这时再加入任务，新加的任务会被加入到阻塞队列中排队，直到有空闲线程
+ （3）如果队列选择了有界队列，那么任务超过了队列大小时，会创建最大线程数 - 核心线程数的救急线程来救急
+ （4）如果线程达到maximumPoolSize仍然有新任务这时会执行拒绝策略。拒绝策略有四种实现：
+   （1）AbortPolicy让调用者抛出RejectedExecutionException异常，这时默认策略
+   （2）CallerRunsPolicy让调用者运行任务
+   （3）DiscardPolicy放弃本次任务
+   （4）DiscardOldestPolicy放弃队列中最早的任务，当前任务取代
+   Dubbo的实现：在抛出RejectedExecutionException异常之前记录日志，并dump线程栈信息，方便定位问题
+   Netty的实现：创建一个新线程来执行任务
+   ActiveMq的实现：带超时等待60s尝试放入队列，类似自定义的拒绝策略
+ （5）当高峰过去之后，超过核心线程数的救急线程如果一段时间没有任务做，需要结束节省资源，这个时间由keepAliveTime和unit控制
+   
+ 
  
  
 

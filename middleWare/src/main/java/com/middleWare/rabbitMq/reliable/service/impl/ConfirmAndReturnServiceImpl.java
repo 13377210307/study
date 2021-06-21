@@ -23,12 +23,9 @@ public class ConfirmAndReturnServiceImpl implements RabbitTemplate.ConfirmCallba
     @Autowired
     private BrokeMessageLogService brokeMessageLogService;
 
-    /**
-     * PostConstruct: 用于在依赖关系注入完成之后需要执行的方法上，以执行任何初始化.
-     */
     @PostConstruct
     public void init() {
-        //指定 ConfirmCallback
+        //设置 ConfirmCallback
         this.rabbitTemplate.setConfirmCallback(this);
     }
 
