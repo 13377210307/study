@@ -180,10 +180,70 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
    （2）CallerRunsPolicy让调用者运行任务
    （3）DiscardPolicy放弃本次任务
    （4）DiscardOldestPolicy放弃队列中最早的任务，当前任务取代
-   Dubbo的实现：在抛出RejectedExecutionException异常之前记录日志，并dump线程栈信息，方便定位问题
-   Netty的实现：创建一个新线程来执行任务
-   ActiveMq的实现：带超时等待60s尝试放入队列，类似自定义的拒绝策略
+        Dubbo的实现：在抛出RejectedExecutionException异常之前记录日志，并dump线程栈信息，方便定位问题
+        Netty的实现：创建一个新线程来执行任务
+        ActiveMq的实现：带超时等待60s尝试放入队列，类似自定义的拒绝策略
  （5）当高峰过去之后，超过核心线程数的救急线程如果一段时间没有任务做，需要结束节省资源，这个时间由keepAliveTime和unit控制
+ 
+4：线程池类型
+（1）newFixedThreadPool
+    特点：
+     （1）核心线程数==最大线程数（没有救急线程被创建），因此无需超时时间
+     （2）阻塞队列是无界的，可以放任意数量的任务
+    评价：
+     适用于任务量已知，相对耗时的任务
+    默认构造方法：
+   public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
+           return new ThreadPoolExecutor(nThreads, nThreads,
+                                         0L, TimeUnit.MILLISECONDS,
+                                         new LinkedBlockingQueue<Runnable>(),
+                                         threadFactory);
+   }
+   
+（2）newCachedThreadPool
+    特点：
+      （1）核心线程数为0，最大线程数是Integer.MAX_VALUE，救急线程的空闲存活时间为60s，意味着
+          （1）全部都是救急线程（60s后可以回收）
+          （2）救急线程可以被无限创建
+      （2）队列采用了synchronousQueue；实现特点是：没有容量，没有线程来取是放不进去的
+    评价：
+      整个线程池表现为线程数会根据任务量不断增长，没有上限，当任务执行完毕，空闲1分钟后释放线程
+      适合任务比较密集，但每个任务执行时间较短得情况（若任务执行时间过长，来一个任务创建一个线程，导致线程数量不可控）
+    默认构造方法：
+    public static ExecutorService newCachedThreadPool() {
+            return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                          60L, TimeUnit.SECONDS,
+                                          new SynchronousQueue<Runnable>());
+    }
+        
+（3）newSingleThreadExecutor
+    使用场景：希望多个任务排队执行。线程数固定为1（核心线程），任务数多于1时，会放入无界队列排队。任务执行完毕，这个唯一的线程也不会释放
+    区别：
+    （1）自己创建一个单线程串行执行任务，如果任务执行失败而终止那么没有任务补救措施，而线程池还会新建一个线程，保证池的正常工作
+    （2）Executors.newSingleThreadExecutor()线程数始终为1，不能修改
+        FinalizableDelegatedExecutorService应用的是装饰者模式，只对外暴露了ExecutorService接口，因此不能调用ThreadPoolExecutor中特有的方法
+    （3）Executors.newFixedThreadPool(1)初始值为1，之后还可以修改
+        对外暴露的是ThreadPoolExecutors对象，可以强转后调用setCorePoolSize等方法进行修改
+    默认构造方法：    
+     public static ExecutorService newSingleThreadExecutor() {
+             return new FinalizableDelegatedExecutorService
+                 (new ThreadPoolExecutor(1, 1,
+                                         0L, TimeUnit.MILLISECONDS,
+                                         new LinkedBlockingQueue<Runnable>()));
+     }
+  
+ 5：提交任务  
+ （1）执行任务
+     void execute(Runnable command);
+ （2）提交任务task，用返回值Future获得任务执行结果
+     
+ （3）提交tasks中所有任务
+ （4）提交tasks中所有任务，带超时时间
+ （5）提交tasks中所有任务，那个任务先成功执行完毕，返回此任务的执行结果，其他任务取消
+ （6）提交tasks中所有任务，那个任务先成功执行完毕，返回此任务的执行结果，其他任务取消，带超时时间
+ 
+ sleep和yield的区别
+ sleep
    
  
  
