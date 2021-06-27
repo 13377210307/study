@@ -78,7 +78,7 @@ class MessageQueue{
     // 存入消息
     public void put(Message message) {
         synchronized (list) {
-            // 检查对立是否满了
+            // 检查队列是否满了
             while (list.size() == capcity) {
                 log.debug("队列已满，生产者线程等待...");
                 try {

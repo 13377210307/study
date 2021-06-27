@@ -151,7 +151,7 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
  
  
  
- 线程池
+ 七：线程池
  1：线程池状态：ThreadPoolExecutor使用int的高3位来表示线程池状态，低29位表示线程数量
  
  状态名                 高3位                接收新任务           处理阻塞队列任务             说明
@@ -236,14 +236,66 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
  （1）执行任务
      void execute(Runnable command);
  （2）提交任务task，用返回值Future获得任务执行结果
-     
+     <T> Future<T> submit(Callable<T> task);
  （3）提交tasks中所有任务
+     <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks)
  （4）提交tasks中所有任务，带超时时间
+     <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks,
+                                       long timeout, TimeUnit unit)
  （5）提交tasks中所有任务，那个任务先成功执行完毕，返回此任务的执行结果，其他任务取消
+     <T> T invokeAny(Collection<? extends Callable<T>> tasks)
  （6）提交tasks中所有任务，那个任务先成功执行完毕，返回此任务的执行结果，其他任务取消，带超时时间
- 
+     <T> T invokeAny(Collection<? extends Callable<T>> tasks,
+                         long timeout, TimeUnit unit)
+                         
+6：关闭线程池：
+（1）shutdown：线程池状态变为SHUTDOWN：不会接收新任务，但已提交的任务会执行完，此方法不会阻塞调用线程的执行
+（2）shutdownNow：线程池状态变为STOP：不会接收新任务，会将队列中的任务返回，并用interrupt的方式中断正在执行的任务
+（3）isShutdown()：不在RUNNING状态的线程池，此方法就返回true
+（4）isTerminated()：线程池状态是否是TERMINATED
+（5）awaitTermination(long timeout,TimeUnit unit)：调用shutdown后，由于调用线程并不会等待所有任务运行结束，因此如果他想在线程池TERMINATED后做些事情可以利用此方法等待
+
+
  sleep和yield的区别
  sleep
+ 
+ 八：锁
+ 1：ReentrantLock
+ （1）相对于synchronized它具备如下特点
+    （1）可中断
+    （2）可以设置超时时间
+    （3）可以设置公平锁
+    （4）支持多个条件变量
+    与synchronized一样，都支持可重入
+ （2）可重入
+  可重入是指同一个线程如果首次获得了这把锁，那么因为他是这把锁的拥有者，因此有权利再次获取这把锁；如果是不可重入锁，那么第二次获得锁时，自己也会被锁住
+ （3）基本语法
+     // 获取锁
+     reentrantLock.lock();
+     try {
+         // 临界区
+     } finally {
+        // 释放锁
+        reentrantLock.unlock();
+     }
+ (4) ReentrantLock默认不公平：不会因为你进入阻塞队列的先后而优先获得锁；公平锁一般没有必要，会降低并发度；但公平锁可以用来解决线程饥饿问题，饥饿问题也可以通过tryLock实现
+ (5) 条件变量
+     synchronized中也有条件变量，就是之间的waitSet休息室，当条件不满足时进入waitSt等待；
+     ReentrantLock的条件变量比Synchronized强大之处在于，他支持多个条件变量，这就好比：
+       （1）synchronized是那些不满足条件的线程都在同一间休息室等消息
+       （2）而ReentrantLock支持多间休息室，有专门等烟的休息室，专门等早餐的休息室、唤醒时也是按休息室来唤醒
+     使用流程
+       （1）await前需要获得锁
+       （2）await执行后，会释放锁，进入conditionObject等待
+       （3）await的线程被唤醒（或打断、或超时）去重新竞争lock锁
+       （4）竞争lock锁成功后，从await后继续执行。
+       
+
+    
+ 
+ 
+ 
+  
    
  
  
