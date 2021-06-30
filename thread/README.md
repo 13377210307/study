@@ -291,6 +291,50 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
        （4）竞争lock锁成功后，从await后继续执行。
        
 
+
+九：AQS
+1：概述
+全称是AbstractQueuedSynchronizer，是阻塞式锁和相关的同步器工具的框架
+特点：
+（1）用state属性表示资源的状态（分独占模式和共享模式），子类需要定义如何维护这个状态，控制如何获取锁和释放锁
+   （1）getState：获取state状态
+   （2）setState：设置state状态
+   （3）compareAndSetState：乐观锁机制设置state状态
+   （4）独占模式是只有一个线程能够访问资源，而共享模式可以允许多个线程访问资源】
+（2）提供了基于FIFO的等待队列，类似Monitor的EntryList
+（3）条件变量来实现等待、唤醒机制，支持多个条件变量，类似Monitor的WaitSet
+
+2：获取锁的姿势
+  // 如果获取锁失败
+  if(!tryAcquire(arg)) {
+     // 入队，可以选择阻塞当前线程   park  unpark
+  }
+  
+3：释放锁的姿势
+  // 如果释放锁成功
+  if(tryRelease(arg)) {
+     // 让阻塞线程恢复运行
+  } 
+  
+  
+4：reentrantLock
+（1）非公平锁实现原理
+    加锁解锁流程：从构造器看，默认为非公平锁
+        public ReentrantLock() {
+            sync = new NonfairSync();
+        }
+    NonfairSync继承自AQS；没有竞争时：
+      
+      NonfairSync
+        state=1
+         head
+         tail
+    exclusiveOwnerThread -----> Thread0
+    
+    第一个竞争出现
+    
+      
+
     
  
  
