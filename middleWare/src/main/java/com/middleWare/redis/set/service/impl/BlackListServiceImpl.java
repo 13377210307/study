@@ -1,11 +1,11 @@
-package com.middleWare.redis.set;
+package com.middleWare.redis.set.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.middleWare.redis.enums.RedisPathEnum;
+import com.middleWare.redis.set.service.BlackListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +17,33 @@ import java.util.Random;
  * 采用redis中的set做为评论黑名单
  */
 @Service
-public class BlackList {
+public class BlackListServiceImpl implements BlackListService {
 
     @Autowired
     private RedisTemplate redisTemplate;
 
     // 添加黑名单
+    @Override
     public void addBlackList(Long userId) {
         this.redisTemplate.opsForSet().add(RedisPathEnum.BLACK_LIST.path,userId);
     }
 
     // 移除黑名单
+    @Override
     public void removeBlackList(Long userId) {
         this.redisTemplate.opsForSet().remove(RedisPathEnum.BLACK_LIST.path,userId);
+    }
+
+    // 评论
+    @Override
+    public String comment(Long userId) {
+        // 获取存放在redis的黑名单列表
+        Boolean member = this.redisTemplate.opsForSet().isMember(RedisPathEnum.BLACK_LIST.path, userId);
+        if (member) {
+            return "您在评论黑名单中，所以不能进行评论";
+        }else {
+            return "评论成功";
+        }
     }
 
     // 初始化黑名单列表
@@ -40,17 +54,6 @@ public class BlackList {
             for (Long blackListData : blackListDatas) {
                 this.redisTemplate.opsForSet().add(RedisPathEnum.BLACK_LIST.path,blackListData);
             }
-        }
-    }
-
-    // 评论
-    public String comment(Long userId) {
-        // 获取存放在redis的黑名单列表
-        Boolean member = this.redisTemplate.opsForSet().isMember(RedisPathEnum.BLACK_LIST.path, userId);
-        if (member) {
-            return "您在评论黑名单中，所以不能进行评论";
-        }else {
-            return "评论成功";
         }
     }
 

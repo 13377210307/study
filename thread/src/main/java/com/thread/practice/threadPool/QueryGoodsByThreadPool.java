@@ -62,4 +62,5 @@ public class QueryGoodsByThreadPool {
             log.debug("已经获取到商品库存信息...");
         });
     }
+
 }

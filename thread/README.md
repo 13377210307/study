@@ -290,6 +290,8 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
        （3）await的线程被唤醒（或打断、或超时）去重新竞争lock锁
        （4）竞争lock锁成功后，从await后继续执行。
        
+  
+       
 
 
 九：AQS
@@ -333,7 +335,91 @@ synchronized(对象) // 线程1获得锁， 那么线程2的状态是(blocked)
     
     第一个竞争出现
     
+      NonfairSync
+        state=1
+        head                      Thread1尝试竞争锁对象
+        tail
+      exclusiveOwnerThread -----> Thread0
+    
+    1：CAS尝试将state由0改为1，结果失败
+    2：进入tryAcquire逻辑，这时1state已经是1，结果任然失败
+    3：接下来进入addWaiter逻辑，构造Node队列：Node是一个双向链表，第一个Node称为哨兵，用来占位，并不关联线程
+    
+    当前线程进入acquireQueued逻辑
+    1：acquireQueued会在一个死循环中不断尝试获得锁，失败后进入park阻塞
+    2：如果自己是紧邻着head（排第二位），那么再次tryAcquire尝试获取锁，当然这时state仍为1，失败
+    3：进入shouldParkAfterFailedAcquire逻辑，将前驱node，即head的waitStatus改为-1（用于唤醒他下一个节点），这次返回false
+    4：shouldParkAfterFailedAcquire执行完毕回到acquireQueued，再次tryAcquire尝试获取锁，这时state仍为1，失败
+    5：当再次进入shouldParkAfterFailedAcquire时，由于前驱node的waitStatus已经是-1了，这次返回true
+    6：进入parkAndCheckInterrupt，thread1 park
+    
+    
+5：countdownLatch
+用来进行线程同步协作，等待所有线程完成倒计时，其中构造参数用来初始化等待计数值，await()用来等待计数归零，countDown()用来计数减1
+
+
+6：CyclicBarrier
+循环栅栏，用来进行线程协作，等待线程满足某个计数。构造时设置计数个数，每个线程执行到某个需要同步的时刻调用await()方法进行等待，当等待的线程数满足计数个数时，继续执行
+他跟countdownLatch的区别是：它可以被重用
+
+
+
+十：线程安全集合类概述
+
+      遗留的安全集合                                 修饰的安全集合                                                JUC安全集合
+          |                                            |                                                         |
+  ————————————————————                       ----------------------                                ------------------------------------
+  |                  |                       |                    |                                |                 |                 |
+ Hashtable        Vector           SynchronizedMap         SynchronizedList                   Blocking类         CopyOnWrite类     Concurrent类
+                              （使用Collections的方法修饰）  （使用Collections的方法修饰） 
+
+线程安全集合类可以分为三大类
+（1）遗留的线程安全集合如：hashtable、vector
+（2）使用Collections装饰的线程安全集合，如：
+    （1）Collections.synchronizedCollection
+    （2）Collections.synchronizeList
+    （3）Collections.synchronizedMap
+    （4）Collections.synchronizedSet
+    （5）Collections.synchronizedNavigableMap
+    （6）Collections.synchronizedNavigableSet
+    （7）Collections.synchronizedSortedMap
+    （8）Collections.synchronizedSortedSet
+（3）java.util.concurrent.*
+    （1）Blocking大部分实现基于锁，并提供用来阻塞的方法
+    （2）CopyOnWrite之类的容器修改开销相对较重
+    （3）Concurrent类型的容器
+       （1）内部很多操作使用cas优化，一般可以提供较高吞吐量
+       （2）弱一致性
+          （1）遍历时弱一致性，例如，当利用迭代器遍历时，如果容器发生修改，迭代器仍然可以继续进行遍历，这时内容是旧的
+          （2）求大小弱一致性，size操作未必是100%准确
+          （3）读取弱一致性
+          遍历时如果发生了修改，对于非安全容器来讲，使用fail-fast机制也就是让遍历立刻失败，抛出ConcurrentModificationException，不再继续遍历
+ 
+
       
+ 十一：JMM
+ 
+ 1：概念：
+ JMM即java Memory Model，它定义了主存（所有线程都共享的数据：静态成员变量、静态变量）、工作内存（线程私有变量：私有变量）抽象概念，底层对应着cpu寄存器、缓存、硬件内存、cpu指令优化等
+ 
+ 2：JMM体现在以下几个方面  
+ （1）原子性：保证指令不会受到线程上下文切换的影响
+ （2）可见性：保证指令不会受cpu缓存的影响
+ （3）有序性：保证指令不会受cpu指令并行优化的影响
+ 
+3：可见性
+（1）通过volatile修饰变量实现可见性；也可以通过synchronized来实现；但是synchronized需要创建monitor监视器，相对于volatile较重
+（2）volatile：可以用来修饰成员变量和静态变量，它可以避免线程从工作内存中读取变量的值，强制让线程到主存中获取变量值，线程操作volatile变量都是直接操作主存
+（3）可见性vs原子性
+    （1）可见性保证的是在多个线程之间，一个线程对volatile变量的修改对另外一个线程可见，不能保证原子性，仅用在一个写线程，多个读线程的情况
+    （2）对于两个线程一个i++，一个i--，只能保证看到最新值，不能解决指令交错：i++或i--是四条指令，可能i++的四条指令没执行完就被i--先执行完了，这样会产生指令交错，导致数据有误
+    （3）注意：synchronized语句块既可以保证代码块的原子性，也同时可以保证代码块内存变量的可见性；但缺点就是synchronized属于重量级操作，性能相对较低
+    （4）在死循环中加入 System.out.println();也可以退出循环；因为 System.out.println();底层使用synchronized修饰了
+    
+4：有序性
+（1）JVM会在不影响正确性的前提下，可以调整语句的执行顺序，这种特性称为指令重排，多线程下指令重排会影响正确性
+
+    
 
     
  
