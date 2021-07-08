@@ -1,7 +1,6 @@
 package com.thread.forkJoin;
 
 import cn.hutool.core.collection.CollectionUtil;
-import lombok.Data;
 
 import java.util.Arrays;
 import java.util.List;
