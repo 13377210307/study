@@ -32,7 +32,6 @@ public class DeadLock {
 
         // 线程a获取到a锁
         new Thread(() -> {
-            System.out.println();
             synchronized (LOCK_A) {
                 log.debug("lock a...");
                 // 过了1秒后获取b锁

@@ -16,6 +16,7 @@
         <module>new-design-model</module>
         <module>netty</module>
         <module>thread</module>
+        <module>spring-frame</module>
     </modules>
 
     <build>

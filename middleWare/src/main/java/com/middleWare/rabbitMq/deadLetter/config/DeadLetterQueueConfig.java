@@ -28,7 +28,6 @@ public class DeadLetterQueueConfig {
     }
 
     // 声明队列
-
     /**
      * 业务队列消息发生异常投递到死信队列
      * @return
