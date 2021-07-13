@@ -17,6 +17,7 @@
         <module>netty</module>
         <module>thread</module>
         <module>spring-frame</module>
+        <module>distribution</module>
     </modules>
 
     <build>

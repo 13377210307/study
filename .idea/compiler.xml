@@ -7,15 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="jdk1.8" />
+        <module name="thread" />
         <module name="spring-frame-consumer1" />
         <module name="netty" />
         <module name="new-design-model" />
+        <module name="spring-frame-gateWay" />
         <module name="middleWare" />
+        <module name="spring-frame-gateway" />
         <module name="basic" />
         <module name="spring-frame-provider" />
         <module name="design-model" />
-        <module name="thread" />
+        <module name="distribution" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-frame-gateway" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

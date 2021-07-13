@@ -1,7 +1,19 @@
 server:
   port: 8002
 spring:
+  application:
+    name: CONSUMER1
   cloud:
     nacos:
       discovery:
         server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+#设置feign客户端超时时间（OpenFeign默认支持ribbon）
+ribbon:
+  #指的是建立连接所用的时间，适用于网络状况正常的情况下，两端连接所用的实际
+  ReadTimeout: 5000
+  #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 5000
+logging:
+  level:
+    # feign日志以什么级别监控哪个接口
+    com.spring.consumer1.openFeign.ProviderFeign: debug

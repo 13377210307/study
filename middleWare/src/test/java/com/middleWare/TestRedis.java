@@ -1,5 +1,6 @@
 package com.middleWare;
 
+import com.middleWare.redis.enums.RedisPathEnum;
 import com.middleWare.redis.set.service.CommonFriendsService;
 import com.middleWare.redis.set.service.impl.BlackListServiceImpl;
 import com.middleWare.redis.str.ArticleReadCount;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * @Author: w
@@ -70,10 +72,33 @@ public class TestRedis {
 
     @Test
     public void test1() {
-        String a = "zs ls ww";
-        String b = "zs ll ww";
-        Set intersect = this.redisTemplate.opsForSet().intersect(a, b);
-        System.out.println(intersect);
+        // 设置守护线程监控即将过期的键
+        this.redisTemplate.opsForValue().set(RedisPathEnum.TIME_OUT.path,"过期值1", 30L,TimeUnit.SECONDS);
+
+        Long expire = this.redisTemplate.getExpire(RedisPathEnum.TIME_OUT.path);
+        while (expire <= 10) {
+            this.redisTemplate.expire(RedisPathEnum.TIME_OUT.path, 30L, TimeUnit.SECONDS);
+        }
+        Thread thread = new Thread(() -> {
+            System.out.println("该键还有" + expire + "秒过期...");
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private Long getTimeOut(ExecutorService pool,String key) {
+        Future<Long> timeoutFuture = pool.submit(() -> {
+            return this.redisTemplate.getExpire(key);
+        });
+        Long timeout = 0L;
+        try {
+            timeout = timeoutFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return timeout;
     }
 
 

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @Author: w
  * @Date: 2021/7/11 15:23
@@ -20,5 +22,15 @@ public class ProviderController {
     @GetMapping
     public String provider() {
         return this.providerService.provider();
+    }
+
+    @GetMapping("/timeout")
+    public String providerTimeout() {
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "生产方提供接口信息...";
     }
 }

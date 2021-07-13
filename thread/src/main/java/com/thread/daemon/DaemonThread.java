@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class DaemonThread {
 
     public static void main(String[] args) {
-        noDaemonThreadDemo();
-        //daemonThreadDemo();
+        //noDaemonThreadDemo();
+        daemonThreadDemo();
     }
 
     /**

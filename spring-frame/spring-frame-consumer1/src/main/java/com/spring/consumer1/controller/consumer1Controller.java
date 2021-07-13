@@ -21,4 +21,9 @@ public class consumer1Controller {
     public String consumer() {
         return this.consumer1Service.consumer();
     }
+
+    @GetMapping("/timeout")
+    public String consumerTimeout() {
+        return this.consumer1Service.consumerTimeout();
+    }
 }

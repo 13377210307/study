@@ -7,4 +7,7 @@ package com.spring.consumer1.service;
 public interface Consumer1Service {
 
     String consumer();
+
+    String consumerTimeout();
+
 }
