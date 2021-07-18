@@ -1,5 +1,6 @@
 package com.thread.practice.communication.providerAndConsumer;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ import java.util.List;
  * 生产消息方法和消费消息方法
  */
 @Slf4j
+@Data
 public class MessageQueue {
 
     // 容量

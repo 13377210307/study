@@ -1,0 +1,11 @@
+server:
+  port: 7001
+spring:
+  application:
+    name: XIECHENG
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}
+  redis:
+    database: 3

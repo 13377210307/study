@@ -1,0 +1,4 @@
+com\ticket\service\impl\TicketServiceImpl.class
+com\ticket\service\TicketService.class
+com\ticket\controller\TicketController.class
+com\ticket\TicketApplication.class

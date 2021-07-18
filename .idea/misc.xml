@@ -9,6 +9,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/distribution/ticket=module1/pom.xml" />
         <option value="$PROJECT_DIR$/spring-frame-gateway/pom.xml" />
       </set>
     </option>

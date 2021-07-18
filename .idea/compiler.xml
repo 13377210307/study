@@ -6,22 +6,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="jdk1.8" />
-        <module name="thread" />
-        <module name="spring-frame-consumer1" />
+        <module name="spring-frame-gateWay" />
+        <module name="ticket=module1" />
         <module name="netty" />
         <module name="new-design-model" />
-        <module name="spring-frame-gateWay" />
         <module name="middleWare" />
-        <module name="spring-frame-gateway" />
-        <module name="basic" />
-        <module name="spring-frame-provider" />
+        <module name="spring-frame-consumer1" />
         <module name="design-model" />
-        <module name="distribution" />
+        <module name="ticket-module2" />
+        <module name="ticket-module1" />
+        <module name="thread" />
+        <module name="basic" />
+        <module name="spring-frame-gateway" />
+        <module name="spring-frame-provider" />
+        <module name="jdk1.8" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spring-frame-gateway" target="1.8" />
+      <module name="ticket=module1" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
