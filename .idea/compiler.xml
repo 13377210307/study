@@ -9,13 +9,15 @@
         <module name="spring-frame-gateWay" />
         <module name="ticket=module1" />
         <module name="netty" />
-        <module name="new-design-model" />
-        <module name="middleWare" />
         <module name="spring-frame-consumer1" />
+        <module name="new-design-model" />
+        <module name="thread" />
+        <module name="middleWare" />
+        <module name="ticket-xiecheng" />
         <module name="design-model" />
         <module name="ticket-module2" />
         <module name="ticket-module1" />
-        <module name="thread" />
+        <module name="ticket-feizhu" />
         <module name="basic" />
         <module name="spring-frame-gateway" />
         <module name="spring-frame-provider" />

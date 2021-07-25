@@ -19,7 +19,10 @@ public class RedissonConfiguration {
 
         // 设置主从或单机
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setDatabase(3);
+        // 服务器
+        config.useSingleServer().setAddress("redis://39.105.59.91:6379").setPassword("wen").setDatabase(0);
+        // 本机
+        //config.useSingleServer().setAddress("redis://127.0.0.1:6379").setDatabase(3);
         return (Redisson)Redisson.create(config);
     }
 

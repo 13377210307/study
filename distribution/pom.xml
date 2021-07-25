@@ -14,6 +14,8 @@
     <modules>
         <module>ticket-module1</module>
         <module>ticket-module2</module>
+        <module>ticket-xiecheng</module>
+        <module>ticket-feizhu</module>
     </modules>
 
     <dependencyManagement>

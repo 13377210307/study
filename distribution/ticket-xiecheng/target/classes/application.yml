@@ -1,0 +1,8 @@
+server:
+  port: 7001
+spring:
+  redis:
+    host: 39.105.59.91
+    port: 6379
+    password: wen
+    database: 0
